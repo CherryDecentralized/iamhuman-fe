@@ -1,0 +1,58 @@
+/* Logo.css */
+.logo-container {
+  display: flex;
+}
+
+/* Responsive styles */
+@media (min-width: 768px) {
+  .logo-image {
+    width: 7.1925rem;
+    height: 6.38944rem;
+    /* margin-top: 1.42rem; */
+    /* margin-left: 14.31rem; */
+  }
+
+  .logo-text {
+    color: #FFF;
+    font-family: Mazzard;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.2625rem;
+    margin-top:2.66rem;
+    /* margin-top: 4.38rem; */
+    /* margin-left: 21.59rem; */
+  }
+  .logo-text-network {
+    letter-spacing: 0.125rem;
+  }
+}
+@media (max-width: 768px) {
+  .logo-image {
+    width:20%;
+    height:20%;
+    position: relative;
+  }
+
+  .logo-container {
+    z-index: 7;
+    position: relative;
+  }
+
+  .logo-text {
+    position: relative;
+    color: #FFF;
+    font-family: Mazzard;
+    font-size: 0.78rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.2625rem;
+    margin-top: 6.2%;
+    margin-left: 5%;
+  }
+  .logo-text-network {
+    letter-spacing: 0.125rem;
+  }
+}

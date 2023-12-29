@@ -1,0 +1,206 @@
+input::placeholder {
+    color: #FFF;
+}
+
+.spaced {
+    letter-spacing: 0.13125rem;
+    font-weight: 700;
+}
+@media (min-width: 768px) {
+    .form-container {
+        position: relative;
+        width: 84.5rem;
+        height: 6.625rem;
+        border-radius: 5rem;
+        border: 1px solid #FFF;
+        display:flex;
+        flex-direction: row;
+        align-items: stretch;
+        color: #FFF;
+    }
+
+    .form-container-in {
+        width: 86.5rem;
+        height: 6.625rem;
+        border:none;
+        background-color: transparent;
+        display:flex;
+    }
+
+    .field {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .form-divider{
+        margin-top: 1.2rem;
+        flex: 1; 
+    }
+    
+    .email-input{
+        width: 27.0625rem;
+        height: 6.6rem;
+        background-color: transparent;
+        color: #FFF;
+        font-family: Mazzard;
+        font-size: 1.25rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: 0.1125rem;
+        border:none;
+        text-align: center;
+        margin-top:1rem;
+    }
+
+    .fullName-input {
+        background-color: transparent;
+        color: #FFF;
+        font-family: Mazzard;
+        font-size: 1.25rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: 0.1125rem;
+        border:none;
+        border-radius: 5rem 0rem 0rem 5rem;
+        width: 17.5625rem;
+        height: 6.625rem;
+        text-align: center;
+        margin-top:1rem;
+    }
+    .subject-input {
+        width: 29.6875rem;
+        height: 6.625rem;
+        background-color: transparent;
+        text-align: center;
+        border:none; 
+        margin-top:1rem;
+    }
+
+    .signup-button {
+        width: 10.24131rem;
+        height: 6.825rem;
+        border-radius: 5rem;
+        background: #FFF;
+        color: #000;
+        font-family: Mazzard;
+        font-size: 1.25rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        letter-spacing: 0.1625rem;
+        margin-top:-0.1rem;
+        margin-left:1rem;
+        border:none;
+        cursor: pointer;
+    }
+    .subject-input::placeholder {
+        color: #fff; /* Placeholder text color */
+        font-size: 1.25rem;
+        font-weight: 400; /* Adjust font-weight as needed */
+        letter-spacing: 0.125rem; /* Adjust letter-spacing as needed */
+    }
+    .signup-button:hover {
+        background-color: #f2f2f2; /* Light gray, for example */
+        color: #000; /* Black text */
+    }
+    .signup-button:active {
+        transform: scale(0.98); /* Slightly shrink the button */
+        background-color: #e2e2e2; /* Even lighter gray */
+    }
+    .signup-button:focus {
+        outline: 1px solid white; /* Add a blue outline */
+    }
+}
+@media (max-width: 768px) {
+    .form-container-mobile {
+        position: relative;
+        width: 90%;
+        height: 4.6rem;
+        border-radius: 5rem;
+        border: 1px solid #FFF;
+        display:flex;
+        align-items: stretch;
+        color: #FFF;
+        margin-left:5%;
+    }
+    .form-container-in-mobile {
+        width: 100%;
+        height: 4.6rem;
+        border:none;
+        background-color: transparent;
+        display:flex;
+        flex-direction: column;
+    }
+
+    .line-mobile {
+        display:flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    .form-divider-mobile{
+        margin-top:0.2rem;
+        flex: 1;
+    }
+    .email-input-mobile{
+        width: 50%;
+        height: 2.3125rem;
+        background-color: transparent;
+        color: #FFF;
+        font-family: Mazzard;
+        font-size: 0.8rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: 0.1125rem; 
+        border:none;
+        text-align: left;
+        border-radius: 0rem 5rem 0rem 0rem;
+
+    }
+    .fullName-input-mobile {
+        background-color: transparent;
+        color: #FFF;
+        font-family: Mazzard;
+        font-size: 0.8rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: 0.1125rem;
+        border:none;
+        border-radius: 5rem 0rem 0rem 0rem;
+        width: 40%;
+        height: 2.3125rem;
+        text-align: center;
+    }   
+    .signup-button-mobile {
+        width: 100%;
+        height: 2.3125rem;
+        border-radius: 0rem 0rem 5rem 5rem;
+        background: #FFF;
+        color: #000;
+        font-family: Mazzard;
+        font-size: 0.8rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        margin-top:0.010rem;
+        letter-spacing: 0.03125rem;
+        /* margin-left:-1rem;  */
+        border:none;
+        cursor: pointer;
+    }
+    .signup-button-mobile:hover {
+        background-color: #f2f2f2; /* Light gray, for example */
+        color: #000; /* Black text */
+    }
+    .signup-button-mobile:active {
+        transform: scale(0.98); /* Slightly shrink the button */
+        background-color: #e2e2e2; /* Even lighter gray */
+    }
+    .signup-button-mobile:focus {
+        outline: 1px solid white; /* Add a blue outline */
+    } 
+}

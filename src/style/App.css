@@ -1,0 +1,149 @@
+@import url('cabinet-grotesk.css');
+@import url('mazzard.css');
+
+@media (min-width: 768px) {
+  .App {
+    display: flex;
+    position:relative;
+    flex-direction: column;
+    width: 90.75rem;
+    height: 170vh;
+    margin-left: 14.31rem;
+    margin-right:15.56rem;
+    background-color: transparent;
+  }
+
+  .header-container {
+    order:1;
+    margin-top: 1.72rem;
+    position:relative;
+    flex-direction: row;
+    align-items: stretch;
+    z-index: 2;
+  }
+
+  .speech-container {
+    order:2;
+    position: relative;
+    color: rgba(255, 255, 255, 0.80);
+    text-align: center;
+    font-family: Mazzard;
+    font-size: 2.89188rem;
+    font-style: normal;
+    font-weight: 275;
+    line-height: normal;
+    margin-top: 2rem;
+  }
+  
+  .globe-container {
+    position:fixed;
+    z-index: -2;
+    height:100vh;
+    width:100%;
+    top:0;
+    left: 0;
+  }
+
+  .signup-container{
+    order:3;
+    position: relative;
+    color: #FFF;
+    font-family: Mazzard;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.2rem;
+    margin-top:33.44rem;
+  }
+
+  #tooltip {
+    position: absolute;
+    background-color: white;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .intro-text{
+    position: relative;
+    width:80%;
+    margin-top: 12%;
+    margin-left: 8%;
+    order:4;
+    color: #FFF;
+    text-align: center;
+    font-family: Mazzard;
+    font-size: 1.5rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 180%; /* 2.7rem */
+    letter-spacing: 0.105rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .App {
+    width: 100%; /* Make it full width on smaller screens */
+    height: 140vh; /* Let the content dictate the height */
+  }
+
+  .header-container{
+    order:1;
+    margin-top: 1.72rem;
+    margin-left: 1.72rem;
+    position:relative;
+    flex-direction: row;
+    align-items: stretch;
+    z-index: 2;
+  }
+
+  .globe-container{
+    position: fixed;
+    z-index: -2;
+    height:200vh;
+    width:100%;
+    top:0;
+    left: 0;
+  }
+  .speech-container{
+    order:2;
+    position: absolute;
+    color: rgba(255, 255, 255, 0.80);
+    text-align: center;
+    font-family: Mazzard;
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: 275;
+    line-height: normal;
+    margin-left: 12%;
+    margin-top:6vh;
+  }
+  .signup-container{
+    order:3;
+    position: relative;
+    color: #FFF;
+    font-family: Mazzard;
+    font-size: 0.85rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.2rem;
+    margin-top:65vh;
+  }
+  .intro-text{
+    color: #FFF;    
+    text-align: center;
+    font-family: Mazzard;
+    font-size: 0.8rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 180%; /* 1.125rem */
+    letter-spacing: 0.04375rem;
+    width: 80%;
+    margin-left: 8%;
+    margin-top:12%;
+  }
+}

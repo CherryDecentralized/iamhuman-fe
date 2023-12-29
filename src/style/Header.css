@@ -1,0 +1,66 @@
+/* Responsive styles */
+@media (min-width: 768px) {
+
+  .header-container-inside {
+    display: flex;
+    position:relative;
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .header-logo{
+    position:relative;
+    width: 22rem;
+    height: 6.38944rem;
+  }
+  .header-navbar {
+    position:relative;
+    color: #FFF;
+    font-family: Mazzard;
+    font-size: 1.20438rem;
+    width: 25.5625rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: uppercase;
+    margin-left:11.12rem;
+    margin-top:2.72rem;
+  }
+  
+  .gofundme-button {
+    border-radius: 2.5rem;
+    border: 1px solid #FFF;
+    width: 14.125rem;
+    height: 3.1875rem;
+    margin-top: 1.6rem;
+    margin-left: 14rem;
+    padding-left: 3.2rem;
+    padding-right: 3.2rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    background-color: transparent;
+    color: #FFF;
+    font-family: Mazzard;
+    font-size: 1.26688rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+  
+  .gofundme-button:hover {
+    opacity: 0.8;
+  }
+  
+  .gofundme-button:active {
+    opacity: 0.7;
+  }
+}
+@media (max-width: 768px) {
+  .header-container-inside {
+    display: flex;
+    flex-direction: row;
+    vertical-align: middle;
+    }
+  .header-navbar {
+    right: 1%;
+  }
+}

@@ -1,0 +1,32 @@
+body{
+
+}
+
+@media (min-width: 768px) {    
+    .mission-container{
+
+    }
+    .mission-globe{
+    
+    }
+    
+    .our-mission{
+    
+    }
+    .how{
+    
+    }
+    .why{
+    
+    }
+    h1{
+    
+    }
+    span{
+    
+    }
+}
+
+@media (max-width: 768px) {
+
+}

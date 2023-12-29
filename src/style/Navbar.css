@@ -1,0 +1,73 @@
+.navbar-container {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+.navbar-item {
+  cursor: pointer;
+  padding-right: 1.36rem;
+  font-family: 'Mazzard', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  transition: font-size 0.3s ease, font-weight 0.3s ease;
+}
+.navbar-item a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.navbar-item:hover {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+/* Responsive styles */
+@media (max-width: 768px) {
+  .burger-menu {
+    display: block;
+    position: absolute;
+    right:6%;
+    margin-top:-0.2rem;
+    z-index: 6;
+  }
+  
+  @keyframes expandOverlay {
+    from {
+      transform: scale(0);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 0.6;
+    }
+  }
+  
+  .overlay {
+    /* ...other styles... */
+    visibility: hidden; /* Initially hidden */
+    opacity: 0;
+    transition: visibility 0s linear 0.5s, opacity 0.5s linear; /* Adjust the timing as needed */
+  }
+  
+  .overlay.visible {
+    visibility: visible;
+    opacity: 0.6;
+    transition-delay: 0s; /* Remove delay when making visible */
+  }
+
+  .menu-item {
+    cursor: pointer;
+    position: relative;
+    color: white;
+    font-family: Mazzard;
+    font-size: 2rem;
+    letter-spacing: 0.1rem;
+    line-height: 4rem;
+    text-align: center;
+    font-weight: 400;
+  }
+  
+  .menu-item.active {
+    text-decoration: underline;
+    /* or a custom underline style */
+  }  
+}
