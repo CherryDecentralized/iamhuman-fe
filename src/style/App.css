@@ -6,89 +6,96 @@
     display: flex;
     position:relative;
     flex-direction: column;
-    width: 90.75rem;
-    height: 170vh;
-    margin-left: 14.31rem;
-    margin-right:15.56rem;
+    width: 100%;
+    height: auto;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
     background-color: transparent;
+    pointer-events: none; /* Let mouse events pass through to the globe */
   }
 
+  .random-element {
+    white-space: nowrap;
+  }
+  
+  .header-container-ecosystem{
+    top:0vh;
+    pointer-events: auto; /* Re-enable for interactive elements inside header */
+
+  }
   .header-container {
-    order:1;
+    order:0;
+    top:-100vh;
     margin-top: 1.72rem;
     position:relative;
     flex-direction: row;
     align-items: stretch;
     z-index: 2;
+    pointer-events: auto; /* Re-enable for interactive elements inside header */
   }
-
-  .speech-container {
-    order:2;
+  .globe-position-home {
     position: relative;
-    color: rgba(255, 255, 255, 0.80);
-    text-align: center;
-    font-family: Mazzard;
-    font-size: 2.89188rem;
-    font-style: normal;
-    font-weight: 275;
-    line-height: normal;
-    margin-top: 2rem;
+    z-index: -2;
+    height: 100vh;
+    width: 100%;
+    top: 0;
+    pointer-events: auto; /* Ensure globe is interactive */
+  }
+  .content-container{
+    position:relative;
+    pointer-events: none;
+    height:auto;
+    top:-100vh;
   }
   
-  .globe-container {
+  .globe-position-ecosystem {
     position:fixed;
-    z-index: -2;
-    height:100vh;
-    width:100%;
-    top:0;
-    left: 0;
+    visibility: hidden;
   }
-
-  .signup-container{
-    order:3;
+  
+  .globe-position-our-mission {
     position: relative;
-    color: #FFF;
-    font-family: Mazzard;
-    font-size: 1.25rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    letter-spacing: 0.2rem;
-    margin-top:33.44rem;
+    z-index: -2;
+    height: 100vh;
+    width: 100%;
+    top: 0;
+    pointer-events: auto; /* Ensure globe is interactive */
   }
 
+  .content-position-our-mission{
+    position:relative;
+    pointer-events: none;
+    height:auto;
+    top:-45vh;
+  }
   #tooltip {
     position: absolute;
     background-color: white;
     padding: 5px;
     border: 1px solid black;
     border-radius: 5px;
-    pointer-events: none;
     z-index: 10;
   }
 
-  .intro-text{
-    position: relative;
-    width:80%;
-    margin-top: 12%;
-    margin-left: 8%;
-    order:4;
-    color: #FFF;
-    text-align: center;
-    font-family: Mazzard;
-    font-size: 1.5rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 180%; /* 2.7rem */
-    letter-spacing: 0.105rem;
+  .content-position-ecosystem{
+    position:relative;
+    pointer-events: none;
+    height:auto;
+    top:20vh;
   }
 }
 
 @media (max-width: 768px) {
   .App {
     width: 100%; /* Make it full width on smaller screens */
-    height: 140vh; /* Let the content dictate the height */
+    height: auto; /* Let the content dictate the height */
+    pointer-events: none;
   }
+
+  .random-element {
+    white-space: nowrap;
+  }  
 
   .header-container{
     order:1;
@@ -98,52 +105,40 @@
     flex-direction: row;
     align-items: stretch;
     z-index: 2;
+    pointer-events: auto;
   }
 
-  .globe-container{
-    position: fixed;
+  .globe-position-home {
+    position: absolute;
     z-index: -2;
-    height:200vh;
+    height:100vh;
     width:100%;
     top:0;
     left: 0;
+    pointer-events: auto;
   }
-  .speech-container{
+  
+  .globe-position-ecosystem {
+    visibility:hidden;
+    position:fixed;
+    z-index: -2;
+  }
+  
+  .globe-position-our-mission {
+    position:absolute;
+    z-index: -2;
+    height:100vh;
+    width:100%;
+    top:-19%;
+    pointer-events: auto;
+  }
+  .content-container{
     order:2;
-    position: absolute;
-    color: rgba(255, 255, 255, 0.80);
-    text-align: center;
-    font-family: Mazzard;
-    font-size: 2rem;
-    font-style: normal;
-    font-weight: 275;
-    line-height: normal;
-    margin-left: 12%;
-    margin-top:6vh;
+    position:relative;
+    pointer-events: none;
   }
-  .signup-container{
-    order:3;
-    position: relative;
-    color: #FFF;
-    font-family: Mazzard;
-    font-size: 0.85rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    letter-spacing: 0.2rem;
-    margin-top:65vh;
-  }
-  .intro-text{
-    color: #FFF;    
-    text-align: center;
-    font-family: Mazzard;
-    font-size: 0.8rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 180%; /* 1.125rem */
-    letter-spacing: 0.04375rem;
-    width: 80%;
-    margin-left: 8%;
-    margin-top:12%;
+
+  .content-position-our-mission{
+    margin-top:52vh;
   }
 }

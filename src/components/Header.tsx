@@ -9,9 +9,16 @@ const GoFundMeButton: React.FC = () => (
   </button>
 );
 
-const Header: React.FC = () => {
-  const [isNavbarFixed, setIsNavbarFixed] = useState<boolean>(true);
+interface HeaderProps {
+  onNavClick: (componentName: string) => void;
+}
 
+const Header: React.FC<HeaderProps> = ({ onNavClick }) => {
+  const [isNavbarFixed, setIsNavbarFixed] = useState<boolean>(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const handleLogoClick = () => {
+    onNavClick('home');
+  };
   useEffect(() => {
     const handleScroll = () => {
         // Assuming each frame is 100vh in height
@@ -21,21 +28,26 @@ const Header: React.FC = () => {
             setIsNavbarFixed(true);
         }
     };
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
 
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
     return () => {
         window.removeEventListener('scroll', handleScroll);
+        window.removeEventListener('resize', handleResize);
     };
   }, []);
-  const isMobile = window.innerWidth <= 768;
+  
   if(!isMobile) {
     return (
       <div className="header-container-inside">
         <div className="header-logo">
-          <Logo />
+          <Logo onClick={handleLogoClick}/>
         </div>
         <div className="header-navbar">
-          <Navbar />
+          <Navbar onNavClick={onNavClick} />
         </div>
         <div className="header-gofundme">
           <GoFundMeButton />
@@ -46,10 +58,10 @@ const Header: React.FC = () => {
     return (
       <div className="header-container-inside">
         <div className="header-logo">
-          <Logo />
+          <Logo onClick={handleLogoClick} />
         </div>
         <div className="header-navbar">
-          <Navbar />
+          <Navbar onNavClick={onNavClick} />
         </div>
       </div>
     );

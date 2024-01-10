@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@loadingio/transition.css": "^3.0.0",
+    "@react-three/drei": "^9.92.7",
+    "@react-three/fiber": "^8.15.12",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -16,6 +18,7 @@
     "axios": "^1.6.2",
     "highcharts": "^11.2.0",
     "highcharts-react-official": "^3.2.1",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-globe": "^2.0.1",
@@ -51,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.202",
     "@types/three": "^0.158.3"
   }
 }

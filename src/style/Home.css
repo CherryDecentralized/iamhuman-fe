@@ -1,0 +1,147 @@
+@media (min-width: 768px) {
+    .Home{
+        display: flex;
+        position:relative;
+        flex-direction: column;
+        width: 100%;
+        height: 60vh;
+        background-color: transparent;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+    }
+
+    .speech-container{
+        order:2;
+        height: auto;
+        position: relative;
+        color: rgba(255, 255, 255, 0.80);
+        text-align: center;
+        font-family: Mazzard;
+        font-size: 2.89188rem;
+        font-style: normal;
+        font-weight: 275;
+        line-height: normal;
+        margin-top: 10vh; 
+    }
+
+    .signup-container{
+        order:3;
+        height: auto;
+        position: relative;
+        color: #FFF;
+        font-family: Mazzard;
+        font-size: 1.25rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: 0.2rem;
+        margin-top:125vh;
+        pointer-events: auto;
+    }
+
+    .gathering{
+        order:4;
+        height: auto;
+        position: relative;
+        color: #FFF;
+        text-align: center;
+        font-family: Mazzard;
+        font-size: 1.26688rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        letter-spacing: 0.16469rem;
+        margin-top:4%;
+    }
+
+    .social-media{
+        order: 5;
+        height: auto;
+        position: relative;
+        margin-top: 1.5%;
+        pointer-events: auto;
+
+    }
+    
+    .intro-text{
+        order:6;
+        height: auto;
+        position: relative;
+        width:80%;
+        margin-top: 6%;
+        color: #FFF;
+        text-align: center;
+        font-family: Mazzard;
+        font-size: 1.5rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 180%; /* 2.7rem */
+        letter-spacing: 0.105rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .Home{
+        width: 100%; /* Make it full width on smaller screens */
+        height: 140vh; /* Let the content dictate the height */ 
+    }
+    .speech-container{
+        order:2;
+        position: relative;
+        color: rgba(255, 255, 255, 0.80);
+        text-align: center;
+        font-family: Mazzard;
+        font-size: 2rem;
+        font-style: normal;
+        font-weight: 275;
+        line-height: normal;
+        margin-left: 12%;
+        margin-top:7vh;
+    }
+    .signup-container{
+        order:4;
+        position: relative;
+        color: #FFF;
+        font-family: Mazzard;
+        font-size: 0.85rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: 0.2rem;
+        margin-top:59vh;
+        pointer-events: auto;
+    }
+    .gathering {
+        order:4;
+        position: relative;
+        color: #FFF;
+        text-align: center;
+        font-family: Mazzard;
+        font-size: 0.51688rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        letter-spacing: 0.06719rem;
+        margin-top:4%;
+    }
+    
+    .intro-text{
+        order:5;
+        position: relative;
+        color: #FFF;    
+        text-align: center;
+        font-family: Mazzard;
+        font-size: 0.8rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 180%; /* 1.125rem */
+        letter-spacing: 0.04375rem;
+        width: 80%;
+        margin-left: 10%;
+        margin-top:12%;
+        backdrop-filter: blur(5px); /* Apply the blur effect */
+        background-color: rgba(0, 0, 0, 0.1); /* Semi-transparent white background */
+      
+    }
+}

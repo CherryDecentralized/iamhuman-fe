@@ -42,13 +42,20 @@
   }
   
   .overlay {
-    /* ...other styles... */
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    justify-content: space-between; /* Space out navbar and social media bar */
+    align-items: center; /* Center-align children */
     visibility: hidden; /* Initially hidden */
     opacity: 0;
-    transition: visibility 0s linear 0.5s, opacity 0.5s linear; /* Adjust the timing as needed */
+    transition: opacity 0.5s ease, visibility 0.5s;
   }
   
   .overlay.visible {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    justify-content: space-between; /* Space out navbar and social media bar */
+    align-items: center; /* Center-align children */
     visibility: visible;
     opacity: 0.6;
     transition-delay: 0s; /* Remove delay when making visible */

@@ -1,25 +1,73 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import '../style/SubmissionForm.css';
 import '../style/transition.css';
-
-// Import different SVGs for mobile and desktop
 import FormDividerMobile from '../assets/form-divider-mobile.svg';
 import FormDividerDesktop from '../assets/form-divider-desktop.svg';
+
+interface ICountry {
+  countryName: string;
+  countryCodeISO: string;
+}
+
+
+interface SubmissionFormProps {
+  onSubmitPledge: (pledgeData: {
+    name: string;
+    email: string;
+    location: {
+      countryCodeISO: string;
+      countryName: string;
+    };
+  }) => void;
+}
+
+const getLocationFromIp = async (): Promise<ICountry | null> => {
+  try {
+    const ipResponse = await fetch('https://api.ipify.org?format=json');
+    const ipData = await ipResponse.json();
+    const ip = ipData.ip;
+
+    const response = await fetch(`https://api.iplocation.net/?ip=${ip}`);
+    const data = await response.json();
+
+    return data && data.country_name && data.country_code2 ? {
+      countryName: data.country_name,
+      countryCodeISO: data.country_code2,
+    } : null;
+  } catch (error) {
+    console.error(`Error fetching IP location: ${error}`);
+    return null;
+  }
+};
 
 const SubmissionForm: React.FC<SubmissionFormProps> = ({ onSubmitPledge }) => {
   const [fullName, setFullName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
-  const [subject, setSubject] = useState<string>('');
   const [animate, setAnimate] = useState(false);
+  const [subject, setSubject] = useState<string>('');
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setAnimate(true); // Trigger animation
-    console.log("animated", animate);
+    setAnimate(true);
+
     try {
-      const response = await axios.post(`${process.env.REACT_APP_PLEDGE_SERVICE_URL}/api/pledges`, { fullName, email, subject });
-      console.log(response.data); // Handle the response as needed
+      const location = await getLocationFromIp();
+      if (!location) throw new Error('Unable to fetch location data');
+
+      const pledgeData = {
+        name: fullName,
+        email: email,
+        location: {
+          countryCodeISO: location.countryCodeISO,
+          countryName: location.countryName,
+        },
+      };
+
+      const response = await axios.post(`${process.env.REACT_APP_PLEDGE_SERVICE_URL}/api/pledges`, pledgeData);
+      console.log(response.data);
+      onSubmitPledge(pledgeData);
     } catch (error) {
       console.error('Error submitting pledge:', error);
     }
@@ -74,56 +122,3 @@ const SubmissionForm: React.FC<SubmissionFormProps> = ({ onSubmitPledge }) => {
 
 export default SubmissionForm;
 
-
-interface SubmissionFormProps {
-  onSubmitPledge: (pledgeData: { firstName: string; email: string; subject: string }) => void;
-}
-interface ICountry {
-  countryName: string;
-  countryCodeISO: string;
-}
-
-// Function to get the IP location
-const getLocationFromIp = async (): Promise<ICountry | null> => {
-  try {
-    const ipResponse = await fetch('https://api.ipify.org?format=json');
-    const ipData = await ipResponse.json();
-    const ip = ipData.ip;
-
-    const response = await fetch(`https://api.iplocation.net/?ip=${ip}`);
-    const data = await response.json();
-
-    if (data && data.country_name && data.country_code2) {
-      return {
-        countryName: data.country_name,
-        countryCodeISO: data.country_code2,
-      };
-    }
-    return null;
-  } catch (error) {
-    console.error(`Error fetching IP location: ${error}`);
-    return null;
-  }
-};
-
-// Function to send country name to server
-const sendCountryNameToServer = async (country: ICountry) => {
-  try {
-    await fetch('YOUR_SERVER_ENDPOINT', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(country),
-    });
-  } catch (error) {
-    console.error(`Error sending country name to server: ${error}`);
-  }
-};
-
-// Example usage
-getLocationFromIp().then(country => {
-  if (country) {
-    sendCountryNameToServer(country);
-  }
-});

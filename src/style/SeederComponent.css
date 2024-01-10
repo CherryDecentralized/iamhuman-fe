@@ -1,0 +1,136 @@
+@media (min-width: 768px) {
+    .seeder-component-container{
+        width:28.4375rem;
+        height:2.75rem;
+        display:flex;
+        flex-direction: row;
+        border-radius: 1.5625rem;
+        z-index: 10;
+        margin-left:5%;
+        margin-top:-5%;
+        color: white;
+        display: flex;
+        z-index: 10;
+        flex-flow: row;
+        justify-content: space-between;
+        align-items: center;
+        opacity:1;
+        font-family: Mazzard;
+        font-size: 0.82938rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+    }
+
+    .inner-container{
+        width:26.875rem;
+        height:2.75rem;
+        border-radius: 1.5625rem;
+        margin-left: 2%;
+        color: white;
+        display: flex;
+        z-index: 10;
+        flex-flow: row;
+        justify-content: space-around;
+        align-items: center;
+        flex-direction: row;
+        display:flex;
+        opacity:1;
+
+    }
+
+    .full-name{
+        color: #FFF;
+        text-align: center;
+        font-family: Mazzard;
+        font-size: 0.82938rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+    }
+    .resource-header{
+        color: #FFF;
+        text-align: center;
+        font-family: Mazzard;
+        font-size: 0.6rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        padding-right:0.5rem;
+    }
+    .countryISO{
+        margin-left: 4%;
+        font-family: Mazzard;
+        font-size: 0.5rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+    }
+    .updownrates{
+        color: #FFF;
+        text-align: center;
+        font-family: Mazzard;
+        font-size: 0.7rem;
+        
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+    .cpuShared{
+
+    }
+    .carbonSecured{
+
+    }
+
+}
+@media (max-width: 768px) {
+    .seeder-component-container{
+        display:flex;
+        flex-direction: column;
+        margin-top:67vh;
+        margin-left:46%;
+        width:13.375rem;
+        height:3.375rem;
+        position:relative;
+        z-index: 10;
+        border-radius: 1.875rem;
+        background: rgba(255, 255, 255, 0.10);
+        color:white;
+        padding:5%;
+    }
+    .row{
+        margin-top:3%;
+        display:flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.7rem;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+    }
+    .countryISO{
+        font-size: 0.4rem;
+    }
+    .full-name{
+        text-align: center;
+        font-family: Mazzard;
+        font-size: 0.82938rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+    .updownrates{
+        font-size: 0.7rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+    }
+    .resource-header{
+        font-size: 0.7rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+}

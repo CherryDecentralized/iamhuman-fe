@@ -24,6 +24,26 @@
     /* margin-top: 4.38rem; */
     /* margin-left: 21.59rem; */
   }
+  .logo-container{
+    transition: transform 0.3s ease; /* Smooth transition for scaling */
+  }
+
+  .logo-container:hover {
+    transform: scale(1.1); /* Scale up the logo on hover */
+  }
+
+  .logo-clicked {
+    transform: scale(0.8); /* More noticeable size reduction */
+    filter: brightness(80%); /* Reduce brightness */
+    transition: transform 0.2s ease, filter 0.2s ease;
+  }
+  
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+
   .logo-text-network {
     letter-spacing: 0.125rem;
   }

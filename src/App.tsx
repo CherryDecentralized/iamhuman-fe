@@ -1,44 +1,117 @@
-import React, { useState } from 'react';
+
 import './style/App.css';
-import GlobeComponent from './components/GlobeComponent';
-import SubmissionForm from './components/SubmissionForm';
 import Header from './components/Header';
-import Speech from './components/Speech';
+import Home from './components/Home';
+import Ecosystem from './components/Ecosystem';
+import Mission from './components/Mission';
+import GlobeComponent from './components/GlobeComponent';
+import { useEffect, useState } from 'react';
 
-const App: React.FC = () => {
-  const onSubmitPledge = (pledgeData: { firstName: string; email: string; subject: string }) => {
-    const [currentComponent, setCurrentComponent] = useState('home');
-
-    const handleNavClick = (componentName: string) => {
-      setCurrentComponent(componentName);
-    };
-    console.log('Pledge submitted:', pledgeData);
-  };
-
-  return (
-    <div>
-      <div className="globe-container">
-          <GlobeComponent />
-      </div>
-      <div className="App">
-        <div className="header-container">
-          <Header />
-        </div>
-
-        <div className="speech-container">
-          <Speech />
-        </div>
-        
-        <div className="signup-container">
-          <SubmissionForm onSubmitPledge={onSubmitPledge} />
-        </div>
-
-        <div className="intro-text">
-          Gaze upon our beautiful planet, a tapestry of cultures, ideas, and aspirations. Here at iamhuman, we stand at the forefront of a digital renaissance, a collective pledge by people from every corner of the Earth to reclaim our earth. Our mission transcends borders and connects hearts, fostering an ecosystem where freedom, collaboration, and innovation aren't just ideals, but the very pillars of our existence. As you witness the globe alight with the souls who have joined this movement, remember that each light represents a voice, a hope, a commitment to a future where we, as a global family, shape a realm as diverse and beautiful as the Earth itself. Together, we are not just users of a network; we are the architects of our destiny. Join us, and be part of this extraordinary journey towards a world where every human being can proudly say: “I Am Free”
-        </div>
-      </div>
-  </div>
-  );
+interface SSEData {
+  name: string;
+  country: string;
+  // include other fields that your SSE data might have
 }
 
+const App: React.FC = () => {
+  const [currentComponent, setCurrentComponent] = useState('home');
+  const [sseData, setSseData] = useState<SSEData[]>([]); // State to store SSE data
+  const handleNavClick = (componentName: string) => {
+    setCurrentComponent(componentName);
+  };
+
+  const createRandomElement = (name, country) => {
+    const element = document.createElement('div');
+    element.className = 'random-element';
+    element.textContent = `${name} - ${country}`;
+    const styles = {
+      position: 'absolute',
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      fontSize: `${Math.random() * 2 + 0.5}rem`, 
+      color: `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 1)`,
+      fontWeight: Math.random() > 0.5 ? 'bold' : 'normal',
+      opacity: 1,
+      transition: 'opacity 1s ease-out',
+    };
+    Object.assign(element.style, styles);
+    document.body.appendChild(element);
+    setTimeout(() => {
+      element.style.opacity = '0';
+      setTimeout(() => element.remove(), 1000);
+    }, 5000);
+  };
+
+  useEffect(() => {
+    const eventSource = new EventSource(process.env.REACT_APP_FEED_SERVICE_URL);
+
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      setSseData(currentData => [...currentData, data]);
+      createRandomElement(data.name, data.country);
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, []);
+
+  const renderComponent = () => {
+    switch (currentComponent) {
+      case 'statistics':
+        return <Home/>
+        break;
+      case 'home':
+        return <Home/>
+        break;
+      case 'ecosystem':
+        return <Ecosystem />
+        break;
+      case 'our-mission':
+        return <Mission />
+      break;
+      default:
+        return <Home/>;
+    }
+  };
+
+  const globeClassMap = {
+    home: 'globe-position-home',
+    ecosystem: 'globe-position-ecosystem',
+    'our-mission': 'globe-position-our-mission',
+    statistics: 'globe-position-statistics'
+  };
+
+  const contentContainerClassMap = {
+    home: 'content-position-home',
+    ecosystem: 'content-position-ecosystem',
+    'our-mission': 'content-position-our-mission',
+    statistics: 'content-position-statistics'
+  };
+
+  const headerContainerClassMap = {
+    home: '',
+    ecosystem: '-ecosystem',
+    'our-mission': '',
+    statistics: ''
+  };
+  
+  const headerContainerClass = headerContainerClassMap[currentComponent] || '';  
+  const contentContainerClass = contentContainerClassMap[currentComponent] || '';
+  const globeClass = globeClassMap[currentComponent] || '';
+
+  return (
+    <div className="App">
+      <div className={`globe-container ${globeClass}`}>
+        <GlobeComponent sseData={[]} />
+      </div>
+      <div className={`header-container${headerContainerClass}`}>
+        <Header onNavClick={handleNavClick} />
+      </div>
+      <div className={`content-container ${contentContainerClass}`}>
+        {renderComponent()}
+      </div>
+    </div>
+  );
+}
 export default App;
