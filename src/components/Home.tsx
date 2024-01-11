@@ -2,12 +2,15 @@ import Speech from "./Speech";
 import SubmissionForm from "./SubmissionForm";
 import '../style/Home.css';
 import SocialMediaBar from "./SocialMediaComponent";
+import { useState } from "react";
 
 
 const Home: React.FC = () => {
-    const onSubmitPledge = (pledgeData: { firstName: string; email: string; subject: string }) => {
-        
-    };
+  const [pledgeSubmitted, setPledgeSubmitted] = useState(false);
+
+  const onSubmitPledge =  () => {
+    setPledgeSubmitted(true);
+  };
 
     return(
     <div className="Home">
@@ -15,9 +18,18 @@ const Home: React.FC = () => {
           <Speech />
         </div>
         
+        {pledgeSubmitted ? (
+        <div className="welcome-message">
+          <p>Thank you fellow human for joining the New Earth movement!</p>
+          <p>Together, we'll make the world a better place.</p>
+          <p>We've sent a confirmation to the email provided.</p>
+        </div>
+      ) : (
         <div className="signup-container">
           <SubmissionForm onSubmitPledge={onSubmitPledge} />
         </div>
+      )}
+
 
         <div className="gathering">
             We are currently gathering! join us and share with your friends

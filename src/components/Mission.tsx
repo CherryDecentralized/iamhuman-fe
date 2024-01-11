@@ -1,6 +1,5 @@
 import React from 'react';
 import '../style/Mission.css';
-import GlobeComponent from './GlobeComponent';
 
 const Mission: React.FC = () => {
     return (

@@ -8,14 +8,17 @@ import GlobeComponent from './components/GlobeComponent';
 import { useEffect, useState } from 'react';
 
 interface SSEData {
-  name: string;
-  country: string;
-  // include other fields that your SSE data might have
+    name: string;
+    email: string;
+    location: {
+      countryCodeISO: string;
+      countryName: string;
+    };
 }
 
 const App: React.FC = () => {
   const [currentComponent, setCurrentComponent] = useState('home');
-  const [sseData, setSseData] = useState<SSEData[]>([]); // State to store SSE data
+  const [sseData, setSseData] = useState<SSEData>(); // State to store SSE data
   const handleNavClick = (componentName: string) => {
     setCurrentComponent(componentName);
   };
@@ -60,16 +63,12 @@ const App: React.FC = () => {
     switch (currentComponent) {
       case 'statistics':
         return <Home/>
-        break;
       case 'home':
         return <Home/>
-        break;
       case 'ecosystem':
         return <Ecosystem />
-        break;
       case 'our-mission':
         return <Mission />
-      break;
       default:
         return <Home/>;
     }
@@ -103,7 +102,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <div className={`globe-container ${globeClass}`}>
-        <GlobeComponent sseData={[]} />
+        <GlobeComponent sseData={sseData} />
       </div>
       <div className={`header-container${headerContainerClass}`}>
         <Header onNavClick={handleNavClick} />

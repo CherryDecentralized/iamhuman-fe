@@ -7,10 +7,8 @@ import OpenConcept from "../assets/open-concept.svg"
 import PeaceCell from "../assets/peace-cell.svg"
 import Seeder from "../assets/seeder.svg"
 import '../style/Ecosystem.css'
-import { useState } from "react"
 
 const ClickableImage = ({ src, alt, className, url }) => {
-    const [isClicked, setIsClicked] = useState(false);
 
     const handleClick = () => {
         // Open the link in a new tab

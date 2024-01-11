@@ -25,6 +25,21 @@
         margin-top: 10vh; 
     }
 
+    .welcome-message{
+        order:3;
+        height: auto;
+        position: relative;
+        color: #FFF;
+        font-family: Mazzard;
+        font-size: 1.25rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: 0.2rem;
+        margin-top:125vh;
+        pointer-events: auto;
+    }
+
     .signup-container{
         order:3;
         height: auto;
@@ -105,6 +120,21 @@
         color: #FFF;
         font-family: Mazzard;
         font-size: 0.85rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: 0.2rem;
+        margin-top:59vh;
+        pointer-events: auto;
+    }
+
+    .welcome-message{
+        order:3;
+        height: auto;
+        position: relative;
+        color: #FFF;
+        font-family: Mazzard;
+        font-size: 1.25rem;
         font-style: normal;
         font-weight: 400;
         line-height: normal;

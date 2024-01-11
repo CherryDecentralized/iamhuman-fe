@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../style/SocialMediaComponent.css'; // Create and import the CSS file for styling
 import { ReactComponent as TwitchIcon } from '../assets/twitch-icon.svg'; // Replace with actual SVG imports
 import { ReactComponent as InstagramIcon } from '../assets/instagram-icon.svg';
