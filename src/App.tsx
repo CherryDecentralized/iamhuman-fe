@@ -18,46 +18,11 @@ interface SSEData {
 
 const App: React.FC = () => {
   const [currentComponent, setCurrentComponent] = useState('home');
-  const [sseData, setSseData] = useState<SSEData>(); // State to store SSE data
+  const [sseData, setSseData] = useState<SSEData | undefined>(); // Keep as a single object
+
   const handleNavClick = (componentName: string) => {
     setCurrentComponent(componentName);
   };
-
-  const createRandomElement = (name, country) => {
-    const element = document.createElement('div');
-    element.className = 'random-element';
-    element.textContent = `${name} - ${country}`;
-    const styles = {
-      position: 'absolute',
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      fontSize: `${Math.random() * 2 + 0.5}rem`, 
-      color: `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 1)`,
-      fontWeight: Math.random() > 0.5 ? 'bold' : 'normal',
-      opacity: 1,
-      transition: 'opacity 1s ease-out',
-    };
-    Object.assign(element.style, styles);
-    document.body.appendChild(element);
-    setTimeout(() => {
-      element.style.opacity = '0';
-      setTimeout(() => element.remove(), 1000);
-    }, 5000);
-  };
-
-  useEffect(() => {
-    const eventSource = new EventSource(process.env.REACT_APP_FEED_SERVICE_URL);
-
-    eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setSseData(currentData => [...currentData, data]);
-      createRandomElement(data.name, data.country);
-    };
-
-    return () => {
-      eventSource.close();
-    };
-  }, []);
 
   const renderComponent = () => {
     switch (currentComponent) {
@@ -80,6 +45,8 @@ const App: React.FC = () => {
     'our-mission': 'globe-position-our-mission',
     statistics: 'globe-position-statistics'
   };
+  const globeClass = globeClassMap[currentComponent] || '';
+
 
   const contentContainerClassMap = {
     home: 'content-position-home',
@@ -87,6 +54,7 @@ const App: React.FC = () => {
     'our-mission': 'content-position-our-mission',
     statistics: 'content-position-statistics'
   };
+  const contentContainerClass = contentContainerClassMap[currentComponent] || '';
 
   const headerContainerClassMap = {
     home: '',
@@ -94,10 +62,18 @@ const App: React.FC = () => {
     'our-mission': '',
     statistics: ''
   };
-  
   const headerContainerClass = headerContainerClassMap[currentComponent] || '';  
-  const contentContainerClass = contentContainerClassMap[currentComponent] || '';
-  const globeClass = globeClassMap[currentComponent] || '';
+
+  useEffect(() => {
+    const eventSource = new EventSource(process.env.REACT_APP_FEED_SERVICE_URL);
+    eventSource.onmessage = (event) => {
+      const data: SSEData = JSON.parse(event.data);
+      setSseData(data); // Update with the latest data
+    };
+    return () => {
+      eventSource.close();
+    };
+  }, []);
 
   return (
     <div className="App">

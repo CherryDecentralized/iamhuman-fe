@@ -23,7 +23,11 @@ interface SSEData {
     };
 }
     
-const GlobeComponent: React.FC<{ sseData: SSEData }> = ({ sseData }) => {
+interface GlobeComponentProps {
+    sseData: SSEData | undefined; // Allow undefined
+}
+
+const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
     const [currentArcs, setCurrentArcs] = useState([]);
     const [hoveredPledge, setHoveredPledge] = useState<any>(null);
     const [pledgeScreenPosition, setPledgeScreenPosition] = useState({ x: 0, y: 0 });
@@ -36,7 +40,7 @@ const GlobeComponent: React.FC<{ sseData: SSEData }> = ({ sseData }) => {
     const globeEl = useRef<any>(null);
     const shapes: t.Mesh<t.BufferGeometry<t.NormalBufferAttributes>, t.MeshStandardMaterial, t.Object3DEventMap>[] = [];
     const pledges: t.Mesh<t.OctahedronGeometry, t.MeshStandardMaterial, t.Object3DEventMap>[] = [];
-    const clock = new t.Clock;
+    const clock = new t.Clock();
     
         
     const selectPledge = (pledge: React.SetStateAction<null> | t.Mesh<t.OctahedronGeometry, t.MeshStandardMaterial, t.Object3DEventMap>, index: React.SetStateAction<number>) => {
@@ -506,7 +510,7 @@ const GlobeComponent: React.FC<{ sseData: SSEData }> = ({ sseData }) => {
             }
         }
     }, [sseData]); // Dependency array includes sseData
-    
+
     return (
         <>
         { (hoveredPledge || selectedPledge) && (
