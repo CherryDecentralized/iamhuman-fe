@@ -56,6 +56,7 @@ const App: React.FC = () => {
   };
   const contentContainerClass = contentContainerClassMap[currentComponent] || '';
 
+  
   const headerContainerClassMap = {
     home: '',
     ecosystem: '-ecosystem',

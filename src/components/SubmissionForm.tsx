@@ -12,7 +12,7 @@ interface ICountry {
 
 
 interface SubmissionFormProps {
-  onSubmitPledge: (pledgeData: {
+  OnSubmitPledge: (pledgeData: {
     name: string;
     email: string;
     location: {
@@ -41,7 +41,7 @@ const getLocationFromIp = async (): Promise<ICountry | null> => {
   }
 };
 
-const SubmissionForm: React.FC<SubmissionFormProps> = ({ onSubmitPledge }) => {
+const SubmissionForm: React.FC<SubmissionFormProps> = ({ OnSubmitPledge }) => {
   const [fullName, setFullName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [animate, setAnimate] = useState(false);
@@ -67,7 +67,7 @@ const SubmissionForm: React.FC<SubmissionFormProps> = ({ onSubmitPledge }) => {
 
       const response = await axios.post(`${process.env.REACT_APP_PLEDGE_SERVICE_URL}/api/pledges`, pledgeData);
       console.log(response.data);
-      onSubmitPledge(pledgeData);
+      OnSubmitPledge(pledgeData);
     } catch (error) {
       console.error('Error submitting pledge:', error);
     }
