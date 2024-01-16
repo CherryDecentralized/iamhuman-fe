@@ -65,7 +65,7 @@ const SubmissionForm: React.FC<SubmissionFormProps> = ({ OnSubmitPledge }) => {
         },
       };
 
-      const response = await axios.post(`${process.env.REACT_APP_PLEDGE_SERVICE_URL}/api/pledges`, pledgeData);
+      const response = await axios.post(`${process.env.REACT_APP_GLOBE_SUBMISSION_URL}`, pledgeData);
       console.log(response.data);
       OnSubmitPledge(pledgeData);
     } catch (error) {
