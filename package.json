@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.202",
-    "@types/three": "^0.158.3"
+    "@types/three": "^0.158.3",
+    "@welldone-software/why-did-you-render": "^8.0.1"
   }
 }

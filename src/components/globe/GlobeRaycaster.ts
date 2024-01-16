@@ -1,6 +1,4 @@
-import ReactDOM from "react-dom";
 import { BufferGeometry, Mesh, MeshBasicMaterial, NormalBufferAttributes, Object3D, Object3DEventMap, Raycaster, Vector2, Vector3 } from "three";
-import SeederComponent from "../SeederComponent";
 
 class GlobeRaycaster {
     raycaster: Raycaster;

@@ -7,6 +7,14 @@ import '../style/App.css'
 import { debounce, throttle } from 'lodash';
 import SeederComponent from './SeederComponent';
 
+import whyDidYouRender from '@welldone-software/why-did-you-render';
+    
+whyDidYouRender(React, {
+
+    trackAllPureComponents: true,
+
+});
+ 
 
 const CLOUDS_IMG_URL = '../assets/clouds.png';
 const CLOUDS_ALT = 0.004;
@@ -27,27 +35,23 @@ interface GlobeComponentProps {
     sseData: SSEData | undefined; // Allow undefined
 }
 
+
 const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
-    const [currentArcs, setCurrentArcs] = useState([]);
     const [hoveredPledge, setHoveredPledge] = useState<any>(null);
     const [pledgeScreenPosition, setPledgeScreenPosition] = useState({ x: 0, y: 0 });
-    const [selectedPledge, setSelectedPledge] = useState(null);
-    const [selectedPledgeIndex, setSelectedPledgeIndex] = useState(0);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [intervalId, setIntervalId] = useState(null);
+    const [currentShapeIndex, setCurrentShapeIndex] = useState(0);
+    const [pledgesReady, setPledgesReady] = useState(false);
+
+    const pledgeArcsMap = new Map();
+
     const isMobile = window.innerWidth <= 768;
 
     const globeEl = useRef<any>(null);
-    const shapes: t.Mesh<t.BufferGeometry<t.NormalBufferAttributes>, t.MeshStandardMaterial, t.Object3DEventMap>[] = [];
+    const shapes = useRef<t.Mesh<t.BufferGeometry<t.NormalBufferAttributes>, t.MeshStandardMaterial, t.Object3DEventMap>[]>([]);
     const pledges: t.Mesh<t.OctahedronGeometry, t.MeshStandardMaterial, t.Object3DEventMap>[] = [];
     const clock = new t.Clock();
-    
-        
-    const selectPledge = (pledge: React.SetStateAction<null> | t.Mesh<t.OctahedronGeometry, t.MeshStandardMaterial, t.Object3DEventMap>, index: React.SetStateAction<number>) => {
-        setSelectedPledge(pledge);
-        setSelectedPledgeIndex(index); // New state variable to track selected pledge index
-        applyHoverEffects(pledge);
-    };
+    let targetScaleVector = new t.Vector3();
+
 
     const throttledUpdatePledgeScreenPosition = throttle((pledge) => {
         if (pledge && !isMobile) {
@@ -62,6 +66,22 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
         }
     }, 100); // Adjust the throttle time as needed
 
+    const createArcsForPledges = () => {
+        const globeRaycaster = new GlobeRaycaster(getGlobeRadius(), shapes.current);
+        getCurrentScene().children.forEach(child => {
+            if(child.userData.isPledge === true){
+                if(!child.userData.arcs.length > 0){
+                    const triangleVertices = globeRaycaster.getTriangleVerticesBelow(child.position, shapes.current);
+                    if(triangleVertices){
+                        const arcs = createArcsForHoveredParticle(child, triangleVertices);
+                        child.userData.arcs = arcs;
+                        pledgeArcsMap.set(child, arcs); // Store the association
+                    }
+                }
+            }
+        });
+    }
+      
     const setupGlobe = (globe: any, scene: any) => {
         globe.controls().autoRotate = true;
         globe.controls().autoRotateSpeed = 0.35;
@@ -79,20 +99,20 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
         globe.camera().lookAt(globe.scene().position);
     }
 
-    const loadCloudsTexture = (globe: { getGlobeRadius: () => number; }) => {
-        new t.TextureLoader().load(CLOUDS_IMG_URL, cloudsTexture => {
-            const clouds = new t.Mesh(
-                new t.SphereGeometry(globe.getGlobeRadius() * (1 + CLOUDS_ALT), 75, 75),
-                new t.MeshPhongMaterial({ map: cloudsTexture, transparent: true })
-            );
-            getCurrentScene().add(clouds);
+    // const loadCloudsTexture = (globe: { getGlobeRadius: () => number; }) => {
+    //     new t.TextureLoader().load(CLOUDS_IMG_URL, cloudsTexture => {
+    //         const clouds = new t.Mesh(
+    //             new t.SphereGeometry(globe.getGlobeRadius() * (1 + CLOUDS_ALT), 75, 75),
+    //             new t.MeshPhongMaterial({ map: cloudsTexture, transparent: true })
+    //         );
+    //         getCurrentScene().add(clouds);
 
-            (function rotateClouds() {
-                clouds.rotation.y += CLOUDS_ROTATION_SPEED * Math.PI / 180;
-                requestAnimationFrame(rotateClouds);
-            })();
-        });
-    }
+    //         (function rotateClouds() {
+    //             clouds.rotation.y += CLOUDS_ROTATION_SPEED * Math.PI / 180;
+    //             //requestAnimationFrame(rotateClouds);
+    //         })();
+    //     });
+    // }
 
     const setupGridGeometry = (globe: any, scene: any) => {
             const globeRadius = globe.getGlobeRadius();
@@ -133,9 +153,11 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
                 const shapeMesh = new t.Mesh(shapeGeometry, triangleMaterialAct);
                 shapeMesh.userData.originalOpacity = shapeMesh.material.opacity; // Save original opacity
                 shapeMesh.userData.originalWireframe = shapeMesh.material.wireframe; // Save original wireframe state
-                shapes.push(shapeMesh);
+                shapes.current.push(shapeMesh);
                 scene.add(shapeMesh);
             });
+            icosahedron.geometry.dispose();
+            icosahedron.material.dispose();
             scene.remove(icosahedron);    
     }
     
@@ -160,7 +182,7 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
     const activateCountry = (listing: { location: { countryName: string; countryCodeISO:string; }; name: any; }) => {
         const countryName = listing.location.countryName;
         const coords = getCoordinatesByCountry(countryName);
-        const raycaster = new GlobeRaycaster(getGlobeRadius, shapes);
+        const raycaster = new GlobeRaycaster(getGlobeRadius, shapes.current);
         activateGridAtCoordinates(coords?.latitude, coords?.longitude, raycaster);
         createParticleAtCoordinate(coords, listing);
     };     
@@ -193,6 +215,8 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
             sphere.userData = {
                 fullName: pledgeObj.name,
                 isHovered: false,
+                isPledge: true,
+                originalColor: randomColor,
                 location:{
                     countryCodeISO: pledgeObj.location.countryCodeISO
                 },
@@ -202,11 +226,9 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
                     cpuShared: Math.floor(Math.random() * 100),
                     ramShared: Math.floor(Math.random() * 100),
                     carbonSecured: Math.random() * 10
-                }
+                },
+                arcs:[]
             };
-
-            sphere.userData.isPledge = true;
-            sphere.userData.originalColor = randomColor; // Store the original color
             sphere.position.copy(position);
             getCurrentScene().add(sphere);
             pledges.push(sphere);
@@ -229,6 +251,7 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
         const arc = new t.Mesh(geometry, material);
         arc.userData.isArc = true;
         arc.userData.isPulsing = true; // Flag to enable pulsing
+
         return arc;
     };
     
@@ -284,63 +307,67 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
         if (intersectedObject) {
             activateTriangle(intersectedObject);
         }
-        // console.log("grid activated");
     };
 
-    const animateCustomLayers = (scene: { children: never[]; add: (arg0: never) => void; remove: (arg0: any) => void; }) => {
-        if (!scene || !scene.children) {
-            return; // Ensure scene and its children are defined
-        }
-    
-        const time = clock.getElapsedTime(); // Total elapsed time
-        const pulseFactor = Math.sin(time * 3); // Pulsation factor for intensity
+    const animateCustomLayers = useCallback((scene: { children: any[] }) => {
         const scaleSpeed = 0.5;
         const baseScale = 1; // Base scale for non-hovered pledges
         const hoverScale = 5; // Maximum scale when hovered
         const amplitude = 0.2; // Amplitude of size pulsation
         const minIntensity = 1; // Minimum intensity to avoid disappearing
         const intensityRange = 0.5; // Range of intensity variation
-    
-        scene.children.forEach((child: { userData: { isPledge: any; isHovered: any; hoverColor: any; originalColor: any; linkedTriangle: null; }; scale: { x: number; y: number; z: number; }; material: { color: { set: (arg0: t.Color) => void; }; }; }) => {
-            if (child.userData && child.userData.isPledge) {
-                const isHovered = child.userData.isHovered; 
-                const hoverColor = new t.Color(child.userData.hoverColor || child.userData.originalColor);
-                //let arcs = child.userData.arcs;
+
+        const pulseFactor = Math.sin(clock.getElapsedTime() * 3);
+        const intensity = minIntensity + intensityRange * pulseFactor;
+
+        scene.children.forEach((child) => {
+            if (child.userData?.isPledge) {
+
+                const isHovered = child.userData.isHovered;
                 let linkedTriangle = child.userData.linkedTriangle;
-    
-                // Pulsation in size when hovered
-                const targetScale = isHovered ? (hoverScale + amplitude * pulseFactor) : baseScale;
-                child.scale.x += (targetScale - child.scale.x) * scaleSpeed;
-                child.scale.y += (targetScale - child.scale.y) * scaleSpeed;
-                child.scale.z += (targetScale - child.scale.z) * scaleSpeed;
-    
-                // Default pulsation in intensity for all pledges
-                const intensity = minIntensity + intensityRange * pulseFactor;
-                child.material.color.set(hoverColor.multiplyScalar(intensity));
-    
-                // Pulsating arcs and triangle
+
+                // Handle arcs and triangles if hovered
                 if (isHovered) {
                     throttledUpdatePledgeScreenPosition(child);
-                    currentArcs.forEach(arc => {
-                        if (!scene.children.includes(arc)) {
-                            scene.add(arc);  // Add arc if not already in the scene
-                        }
-                        // Update arc properties if needed
-                        arc.material.color.set(hoverColor.multiplyScalar(minIntensity + intensityRange * pulseFactor));
+                    const hoverColor = new t.Color(child.userData.hoverColor || child.userData.originalColor);
+
+                    // Calculate scale and apply it
+                    const targetScale = isHovered ? (hoverScale + amplitude * pulseFactor) : baseScale;
+                    targetScaleVector.set(targetScale, targetScale, targetScale);
+                    child.scale.lerp(targetScaleVector, scaleSpeed);
+
+                    // Update material color
+                    child.material.color.set(hoverColor.multiplyScalar(intensity));
+
+                    //activate arcs for current hovered
+                    const associatedArcs = pledgeArcsMap.get(child) || [];
+                    associatedArcs.forEach(arc => {
+
+                        arc.visible = true; // Update visibility based on hover state
+                        arc.userData.isPulsating = true;
+
+                        // Update color and intensity if visible
+                        const intensity = minIntensity + intensityRange * Math.sin(clock.getElapsedTime() * 3);
+                        arc.material.color.set(hoverColor.multiplyScalar(intensity));
+
                     });
-                    if (linkedTriangle && linkedTriangle.material) {
+
+                    //activate triangles
+                    if (child.userData.linkedTriangle && child.userData.linkedTriangle) {
                         linkedTriangle.material.color.set(hoverColor.multiplyScalar(minIntensity + intensityRange * pulseFactor));
                         linkedTriangle.material.wireframe = false; // Fill the triangle
                     }
+
                 } else {
-                    // Remove any arcs that are no longer in the currentArcs state
-                    scene.children.forEach((child: { userData: { isArc: any; }; geometry: { dispose: () => void; }; material: { dispose: () => void; }; }) => {
-                        if (child.userData && child.userData.isArc && !currentArcs.includes(child)) {
-                            scene.remove(child);
-                            if (child.geometry) child.geometry.dispose();
-                            if (child.material) child.material.dispose();
-                        }
+
+                    //stop arcs pulsate and visibility
+                    const associatedArcs = pledgeArcsMap.get(child) || [];
+                    associatedArcs.forEach(arc => {
+                        arc.visible = false;
+                        arc.userData.isPulsating = false; // Update visibility based on hover state
                     });
+
+                    //reset triangles
                     if (linkedTriangle) {
                         linkedTriangle.material.opacity = linkedTriangle.userData.originalOpacity;
                         linkedTriangle.material.wireframe = true; // Back to wireframe
@@ -350,36 +377,18 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
                 }
             }
         });
-    
         window.requestAnimationFrame(() => animateCustomLayers(scene));
-    };
-
-    const handleIntersections = (mouse: t.Vector2) => {
-        const raycaster = new GlobeRaycaster(getGlobeRadius(), pledges);
-        const intersects = raycaster.checkIntersections(mouse, globeEl.current.camera(), pledges);
-        if(intersects){
-            return intersects.length > 0 ? intersects[0].object : null;
-        }
-        else{
-            return null
-        }
-    };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [hoveredPledge]);
 
     const applyHoverEffects = (pledge: t.Mesh<t.OctahedronGeometry, t.MeshStandardMaterial, t.Object3DEventMap>) => {
-        const globeRaycaster = new GlobeRaycaster(getGlobeRadius(), shapes);
+        const globeRaycaster = new GlobeRaycaster(getGlobeRadius(), shapes.current);
         //pledge scale up and down
         pledge.userData.isHovered = true;
         //arcs pulsating in pledge color
         pledge.userData.isPulsating = true;
-
-        const triangleVertices = globeRaycaster.getTriangleVerticesBelow(pledge.position, shapes);
-        if (triangleVertices) {
-            const arcs = createArcsForHoveredParticle(pledge, triangleVertices);
-            setCurrentArcs(arcs);
-        }
-
         //triangles below pulsating with arcs
-        const triangleBelow = globeRaycaster.getTriangleBelow(pledge.position, shapes);
+        const triangleBelow = globeRaycaster.getTriangleBelow(pledge.position, shapes.current);
         if (triangleBelow) {
             pledge.userData.linkedTriangle = triangleBelow;
         }
@@ -390,10 +399,11 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
     };
     
     const resetHoverEffects = (pledge: t.Mesh<t.OctahedronGeometry, t.MeshStandardMaterial, t.Object3DEventMap>) => {
-
         //kill pledge scaling
         pledge.userData.isHovered = false;
         pledge.userData.isPulsating = false;
+        pledge.scale.set(1,1,1);
+
         //kill triangles pulsate
         if (pledge.userData.linkedTriangle) {
             pledge.userData.hoverColor = pledge.userData.originalColor; // Store hover color
@@ -402,97 +412,88 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
             pledge.userData.linkedTriangle.material.color.set(new t.Color(0xFFFFFF));
             pledge.userData.linkedTriangle = null;
         }
-        setCurrentArcs([]);
     };
 
     const updatePledgeHoverState = (newHoveredPledge: t.Object3D<t.Object3DEventMap> | null) => {
         // Iterate over pledges and update the hover state
-        let isHoverChanged = false;
-        pledges.forEach(pledge => {
+        getCurrentScene().children.forEach(pledge => {
             if (pledge === newHoveredPledge) {
                 // Apply hover effects and mark as hovered
                 applyHoverEffects(pledge);
-                isHoverChanged = true;
-
             } else if (pledge.userData.isHovered) {
                 // Reset hover effects and mark as not hovered
                 resetHoverEffects(pledge);
-                isHoverChanged = true;
             }
         });
-
-        if(isHoverChanged){
-            getCurrentScene().updateMatrixWorld(); // Update the scene
-        }
     };
-
+    
     const cyclePledges = () => {
-        if (pledges.length === 0) {
-            return;
+        const pledgeList = getCurrentScene().children
+            .filter((child) => child.userData?.isPledge)
+
+        if (pledgeList.length > 0) {
+            const newIndex = (currentShapeIndex + 1) % pledgeList.length;
+            setCurrentShapeIndex(newIndex);
+            const newHoveredPledge = pledgeList[newIndex];
+            updatePledgeHoverState(newHoveredPledge);
+            setHoveredPledge(newHoveredPledge);
         }
-    
-        let newIndex = selectedPledgeIndex + 1;
-        if (newIndex >= pledges.length) {
-            newIndex = 0;
-        }
-    
-        const newPledge = pledges[newIndex];
-        if (!newPledge) {
-            return;
-        }
-    
-        selectPledge(newPledge, newIndex);
     };
-    
-    const onMouseMove = useCallback(debounce((event) => {    
-        if (selectedPledge) {
-            // If a pledge is selected, ignore hover changes
-            return;
-        }
-    
-        const mouse = new t.Vector2();
-        mouse.x = (event.offsetX / window.innerWidth) * 2 - 1;
-        mouse.y = -(event.offsetY / window.innerHeight) * 2 + 1;
-    
-        const intersectedPledge = handleIntersections(mouse);
-        if (intersectedPledge !== hoveredPledge) {
-            setHoveredPledge(intersectedPledge);
-            updatePledgeHoverState(intersectedPledge);
-        }
-    }, 50), [hoveredPledge, selectedPledge]);
 
     useEffect(() => {
-        const handleMouseMove = (event: any) => onMouseMove(event);
-        window.addEventListener('mousemove', handleMouseMove);
-        window.requestAnimationFrame(() => animateCustomLayers(getCurrentScene()));
-        const id = setInterval(cyclePledges, 5000);
-        setIntervalId(id);
-
+        const intervalId = setInterval(cyclePledges, 5000); // Change interval as need
         return () => {
-            window.removeEventListener('mousemove', onMouseMove);
-            clearInterval(id);
-        }
-    }, [onMouseMove, currentArcs, hoveredPledge, currentIndex, selectedPledgeIndex]);
+            clearInterval(intervalId);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [hoveredPledge]);
 
-    //Initialize Scene useEffect
+
     useEffect(() => {
+        // Setup
         if (!globeEl.current) return;
-        loadCloudsTexture(globeEl.current);
+
+        //loadCloudsTexture(globeEl.current);
         setupGlobe(globeEl.current, getCurrentScene());
         setupGridGeometry(globeEl.current, getCurrentScene());
-        fetchAndActivateCountries();
-        window.requestAnimationFrame(() => animateCustomLayers(getCurrentScene()));
-    }, []);
-    
-    //arc cleanup
-    useEffect(() => {
+        fetchAndActivateCountries()
+        setPledgesReady(true); // Indicate that pledges are ready
+
+        let animationFrameId: number;
+        // Define the animation function
+        animationFrameId = window.requestAnimationFrame(() => animateCustomLayers(getCurrentScene()));
+
+        // Cleanup
         return () => {
-            currentArcs.forEach(arc => {
-                if (arc.geometry) arc.geometry.dispose();
-                if (arc.material) arc.material.dispose();
-            });
+            window.cancelAnimationFrame(animationFrameId);
         };
-    }, [currentArcs, hoveredPledge]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
+
+
+    useEffect(() => {
+        
+        let animationFrameId: number;
+        animationFrameId = window.requestAnimationFrame(() => animateCustomLayers(getCurrentScene()));
+
+        // Check if pledges are ready and create arcs
+        const checkInterval = setInterval(() => {
+            const scene = getCurrentScene();
+            
+            if (scene && scene.children.some(child => child.userData.isPledge)) {
+                createArcsForPledges();
+                clearInterval(checkInterval);
+            }
+        }, 500); // Check every 500 ms
+
+        // Cleanup
+        return () => {
+            clearInterval(checkInterval);
+            window.cancelAnimationFrame(animationFrameId);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
 
     useEffect(() => {
         if (sseData && sseData.location && sseData.location.countryName) {
@@ -504,16 +505,19 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
                 createParticleAtCoordinate(coords, sseData);
 
                 // Activate the country on the globe
-                const raycaster = new GlobeRaycaster(getGlobeRadius, shapes);
+                const raycaster = new GlobeRaycaster(getGlobeRadius, shapes.current);
                 activateCountry(sseData);
                 activateGridAtCoordinates(coords.latitude, coords.longitude, raycaster);
+                //TODO("add arc creation for new particles")
             }
         }
-    }, [sseData]); // Dependency array includes sseData
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sseData]);
+
 
     return (
         <>
-        { (hoveredPledge || selectedPledge) && (
+        { (hoveredPledge) && (
             <div
                 style={{
                     display: 'block',
@@ -522,7 +526,7 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
                     top: `${pledgeScreenPosition.y}px`,
                     zIndex: '10',
                 }}>
-                <SeederComponent pledge={hoveredPledge || selectedPledge} />
+                <SeederComponent pledge={hoveredPledge} />
             </div>
         )}
         <Globe
