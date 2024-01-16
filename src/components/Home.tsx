@@ -8,7 +8,7 @@ import { useState } from "react";
 const Home: React.FC = () => {
   const [pledgeSubmitted, setPledgeSubmitted] = useState(false);
 
-  const onSubmitPledge =  () => {
+  const OnSubmitPledge =  () => {
     setPledgeSubmitted(true);
   };
 
@@ -26,7 +26,7 @@ const Home: React.FC = () => {
         </div>
       ) : (
         <div className="signup-container">
-          <SubmissionForm OnSubmitPledge={onSubmitPledge} />
+          <SubmissionForm OnSubmitPledge={OnSubmitPledge} />
         </div>
       )}
 
