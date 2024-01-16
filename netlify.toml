@@ -1,0 +1,52 @@
+[build]
+  publish = "build/"
+  command = "npm run build"
+
+
+[[headers]]
+  for = "/src/fonts/Cabinet-Grotesk/*.woff"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Content-Type = "application/font-woff"
+
+[[headers]]
+  for = "/src/fonts/Cabinet-Grotesk/*.woff2"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Content-Type = "application/font-woff2"
+
+[[headers]]
+  for = "/src/fonts/Cabinet-Grotesk/*.ttf"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Content-Type = "application/font-ttf"
+
+[[headers]]
+  for = "/src/fonts/Cabinet-Grotesk/*.eot"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Content-Type = "application/font-eot"
+
+[[headers]]
+  for = "/src/fonts/Mazzard/*.woff"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Content-Type = "application/font-woff"
+
+[[headers]]
+  for = "/src/fonts/Mazzard/*.woff2"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Content-Type = "application/font-woff2"
+
+[[headers]]
+  for = "/src/fonts/Mazzard/*.ttf"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Content-Type = "application/font-ttf"
+
+[[headers]]
+  for = "/src/fonts/Mazzard/*.eot"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Content-Type = "application/font-eot"
