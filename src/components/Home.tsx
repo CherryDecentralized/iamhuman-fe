@@ -26,7 +26,7 @@ const Home: React.FC = () => {
         </div>
       ) : (
         <div className="signup-container">
-          <SubmissionForm onSubmitPledge={onSubmitPledge} />
+          <SubmissionForm OnSubmitPledge={onSubmitPledge} />
         </div>
       )}
 
