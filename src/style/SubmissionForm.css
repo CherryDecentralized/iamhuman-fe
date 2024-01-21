@@ -14,7 +14,7 @@ input::placeholder {
         border-radius: 5rem;
         border: 1px solid #FFF;
         display:flex;
-        flex-direction: row;
+        flex-direction: row; 
         align-items: stretch;
         color: #FFF;
     }
@@ -25,6 +25,10 @@ input::placeholder {
         border:none;
         background-color: transparent;
         display:flex;
+    }
+    .form-container:focus-within{
+        transform: scale(1.05);
+        transition: transform 0.3s ease;
     }
 
     .field {
@@ -75,8 +79,9 @@ input::placeholder {
         height: 6.625rem;
         background-color: transparent;
         text-align: center;
-        border:none; 
-        margin-top:1rem;
+        vertical-align: middle;
+        border:none;
+        margin-top: 20%; 
     }
 
     .signup-button {
@@ -96,12 +101,17 @@ input::placeholder {
         border:none;
         cursor: pointer;
     }
-    .subject-input::placeholder {
-        color: #fff; /* Placeholder text color */
-        font-size: 1.25rem;
-        font-weight: 400; /* Adjust font-weight as needed */
-        letter-spacing: 0.125rem; /* Adjust letter-spacing as needed */
+
+    .signup-button:hover {
+        transform: scale(1.1);
+        transition: transform 0.3s ease;
     }
+
+    .signup-button:active {
+        transform: scale(0.9);
+        transition: transform 0.1s ease;
+    }
+    
     .signup-button:hover {
         background-color: #f2f2f2; /* Light gray, for example */
         color: #000; /* Black text */
@@ -134,7 +144,10 @@ input::placeholder {
         display:flex;
         flex-direction: column;
     }
-
+    .form-container-mobile:focus-within{
+        transform: scale(1.05);
+        transition: transform 0.3s ease;
+    }
     .line-mobile {
         display:flex;
         flex-direction: row;

@@ -95,7 +95,7 @@ const SubmissionForm: React.FC<SubmissionFormProps> = ({ OnSubmitPledge }) => {
             </div>
           </div>
           <div className="field">
-            <input className="subject-input" type="text" value={subject} onChange={e => setSubject(e.target.value)} placeholder="I am human and I want peace" />
+            <div className="subject-input"> I am human and I want peace </div>
           </div>
           <button className="signup-button" type="submit">Sign Up</button>
         </form>

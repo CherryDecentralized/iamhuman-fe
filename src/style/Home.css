@@ -14,7 +14,7 @@
     .speech-container{
         order:2;
         height: auto;
-        position: relative;
+        position: absolute;
         color: rgba(255, 255, 255, 0.80);
         text-align: center;
         font-family: Mazzard;
@@ -22,7 +22,7 @@
         font-style: normal;
         font-weight: 275;
         line-height: normal;
-        margin-top: 10vh; 
+        margin-top: -49vh;
     }
 
     .welcome-message{
@@ -51,7 +51,7 @@
         font-weight: 400;
         line-height: normal;
         letter-spacing: 0.2rem;
-        margin-top:125vh;
+        margin-top:135vh;
         pointer-events: auto;
     }
 
