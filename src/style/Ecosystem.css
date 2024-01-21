@@ -3,7 +3,7 @@
         display: flex;
         flex-direction: column;
         flex:1;
-        width: 100%;
+        width: 80%;
         height: auto;
         justify-content: space-between;
         align-content: center;
@@ -93,10 +93,9 @@
         line-height: 150%; /* 1.875rem */
         margin-top:6%;
         margin-bottom:6%;
-        width:75%;
+        /* width:75%; */
     }
     .coming-soon{
-        width:75%;
         display: grid;
         grid-template-columns: repeat(2, 1fr); 
         gap: 10px; /* Space between grid items */
