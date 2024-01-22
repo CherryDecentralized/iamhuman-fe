@@ -94,6 +94,9 @@
         line-height: 180%; /* 2.7rem */
         letter-spacing: 0.105rem;
     }
+    p{
+        height:2%;
+    }
 }
 
 @media (max-width: 768px) {

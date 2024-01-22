@@ -145,6 +145,7 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
                 const shapeMesh = new t.Mesh(shapeGeometry, triangleMaterialAct);
                 shapeMesh.userData.originalOpacity = shapeMesh.material.opacity; // Save original opacity
                 shapeMesh.userData.originalWireframe = shapeMesh.material.wireframe; // Save original wireframe state
+                shapeMesh.userData.firstPledgeCreated = 0;
                 shapes.current.push(shapeMesh);
                 scene.add(shapeMesh);
             });
@@ -192,23 +193,29 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
     const createParticleAtCoordinate = (coords: { latitude: number, longitude: number } | null, pledgeObj: { location: { countryName: string; countryCodeISO:string; }; name: any; }) => {
         if (coords) {
             let position;
-    
             // Find the triangle below the given coordinates
             const globeRaycaster = new GlobeRaycaster(getGlobeRadius(), shapes.current);
-            const targetPosition = globeEl.current.getCoords(coords.latitude, coords.longitude, getGlobeRadius());
+            const targetPosition = globeEl.current.getCoords(coords.latitude, coords.longitude, getGlobeRadius() * 0.01);
             const intersectedTriangle = globeRaycaster.findTriangleByVector(targetPosition);
     
-            if (intersectedTriangle && !intersectedTriangle.userData.firstPledgeCreated) {
-                // No offset for the first pledge
-                position = targetPosition;
+            if (intersectedTriangle) {
+                intersectedTriangle.userData.firstPledgeCreated = intersectedTriangle.userData.firstPledgeCreated + 1; 
+                if(intersectedTriangle.userData.firstPledgeCreated <= 1) {
+                    // No offset for the first pledge
+                    position = targetPosition;
+                    console.log("generated without offset");
+                } else {
+                    // Apply random offset for subsequent pledges
+                    const randomOffset = () => (Math.random() - 0.5) * 20;
+                    position = globeEl.current.getCoords(
+                        coords.latitude + randomOffset(),
+                        coords.longitude + randomOffset(),
+                        (getGlobeRadius() * 0.01) + (Math.random() * 0.001)
+                    );
+                    console.log(intersectedTriangle);
+                }
             } else {
-                // Apply random offset for subsequent pledges
-                const randomOffset = () => (Math.random() - 0.5) * 20;
-                position = globeEl.current.getCoords(
-                    coords.latitude + randomOffset(),
-                    coords.longitude + randomOffset(),
-                    (getGlobeRadius() * 0.01) + (Math.random() * 0.001)
-                );
+                return;
             }
     
             const randomColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
@@ -274,47 +281,68 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
         return globeEl.current ? globeEl.current.getGlobeRadius() : 0;
     };
     
-    const activateGridAtCoordinates = (targetLatitude: number | undefined, targetLongitude: number | undefined, globeRaycaster: GlobeRaycaster) => {
-        let isFirstPledgeActivation = true; // Flag to check the first activation
+    // const activateGridAtCoordinates = (targetLatitude: number | undefined, targetLongitude: number | undefined, globeRaycaster: GlobeRaycaster) => {
+    //     let isFirstPledgeActivation = true; // Flag to check the first activation
     
-        const activateTriangle = (triangle: { userData: { activated: boolean; originalOpacity: any; }; material: { opacity: number; }; }) => {
-            // Increase opacity based on whether it's the first activation
-            if (isFirstPledgeActivation && !triangle.userData.activated) {
-                if(!triangle.userData.activated){
-                triangle.userData.firstPledgeCreated = true;
-                triangle.material.opacity = 0.3; // Initial opacity for first pledge
-                isFirstPledgeActivation = false; // Reset the flag after first activation
-                triangle.userData.originalOpacity = triangle.material.opacity; // Save original opacity
-                }
-            } else {
-                // Gradually increase opacity for subsequent activations
-                triangle.material.opacity = Math.min(triangle.material.opacity + 0.0085, 0.1);
-                triangle.userData.originalOpacity = triangle.material.opacity; // Save original opacity
-            }
+    //     const activateTriangle = (triangle: { userData: { activated: boolean; originalOpacity: any; firstPledgeCreated:number; }; material: { opacity: number; }; }) => {
+    //         // Increase opacity based on whether it's the first activation
+    //         if (triangle.material.opacity === 0 && isFirstPledgeActivation) {
+    //             triangle.material.opacity += 0.2; // Initial opacity for first pledge
+    //             isFirstPledgeActivation = false; // Reset the flag after first activation
+    //             triangle.userData.originalOpacity = triangle.material.opacity; // Save original opacity
+    //             // Mark triangle as activated
+    //             triangle.userData.activated = true;
+    //         } else {
+    //             // Gradually increase opacity for subsequent activations
+    //             triangle.material.opacity = Math.min(triangle.material.opacity + 0.015, 0.1);
+    //             triangle.userData.originalOpacity = triangle.material.opacity; // Save original opacity
+    //         }
     
-            // Check if triangle is fully opaque (for subsequent activations)
-            if (triangle.material.opacity < 0.08 && !isFirstPledgeActivation ) {
-                return; // Stop if not fully opaque
-            }
+    //         // Check if triangle is fully opaque (for subsequent activations)
+    //         if (triangle.material.opacity < 0.1 && !isFirstPledgeActivation ) {
+    //             return; // Stop if not fully opaque
+    //         }
     
-            // Mark triangle as activated
-            triangle.userData.activated = true;
+    //         // Activate adjacent triangles
+    //         const adjacentTriangles = globeRaycaster.findAdjacentTriangles(triangle);
+    //         adjacentTriangles.forEach((adjTriangle: { userData: { activated: any; }; }) => {
+    //             if (adjTriangle.material.opacity < 0.2) {
+    //                 activateTriangle(adjTriangle); // Recursive call
+    //             }
+    //         });
+    //     };
     
-            // Activate adjacent triangles
-            const adjacentTriangles = globeRaycaster.findAdjacentTriangles(triangle);
-            adjacentTriangles.forEach((adjTriangle: { userData: { activated: any; }; }) => {
+    //     const position = globeEl.current.getCoords(targetLatitude, targetLongitude, getGlobeRadius());
+    //     const intersectedObject = globeRaycaster.findTriangleByVector(position);
+    //     if (intersectedObject) {
+    //         activateTriangle(intersectedObject);
+    //     }
+    // };
+
+    const activateGridAtCoordinates = (targetLatitude, targetLongitude, globeRaycaster) => {
+        const position = globeEl.current.getCoords(targetLatitude, targetLongitude, getGlobeRadius());
+        const intersectedTriangle = globeRaycaster.findTriangleByVector(position);
+    
+        if (intersectedTriangle) {
+            // Increase opacity for the triangle directly under the pledge
+            const directOpacityIncrease = 0.1; // Opacity increase for the directly intersected triangle
+            intersectedTriangle.material.opacity = Math.min(intersectedTriangle.material.opacity + directOpacityIncrease, 0.6);
+            intersectedTriangle.userData.originalOpacity = intersectedTriangle.material.opacity;
+            intersectedTriangle.userData.activated = true;
+    
+            // Find and activate adjacent triangles with a slower opacity increase
+            const adjacentOpacityIncrease = directOpacityIncrease / 2.5; // 200% slower than direct opacity increase
+            const adjacentTriangles = globeRaycaster.findAdjacentTriangles(intersectedTriangle);
+            adjacentTriangles.forEach(adjTriangle => {
                 if (!adjTriangle.userData.activated) {
-                    activateTriangle(adjTriangle); // Recursive call
+                    adjTriangle.material.opacity = Math.min(adjTriangle.material.opacity + adjacentOpacityIncrease, 0.4);
+                    adjTriangle.userData.originalOpacity = adjTriangle.material.opacity;
+                    adjTriangle.userData.activated = true;
                 }
             });
-        };
-    
-        const position = globeEl.current.getCoords(targetLatitude, targetLongitude, getGlobeRadius());
-        const intersectedObject = globeRaycaster.findTriangleByVector(position);
-        if (intersectedObject) {
-            activateTriangle(intersectedObject);
         }
     };
+    
 
     const animateCustomLayers = useCallback((scene: { children: any[] }) => {
         const scaleSpeed = 0.5;
@@ -515,7 +543,7 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
                 const raycaster = new GlobeRaycaster(getGlobeRadius, shapes.current);
                 activateCountry(sseData);
                 activateGridAtCoordinates(coords.latitude, coords.longitude, raycaster);
-                //TODO("add arc creation for new particles")
+                createParticleAtCoordinate(coords, sseData);
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
