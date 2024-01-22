@@ -24,7 +24,7 @@ import downRate from "../assets/down.svg";
         }
       } = pledge.userData;
         
-    const pledgeColor = pledge.userData.originalColor; // Assuming color is a Three.js Color
+    const pledgeColor = pledge.material.color.getStyle(); // Assuming color is a Three.js Color
     
     const containerStyle = {
       backgroundColor: pledgeColor,

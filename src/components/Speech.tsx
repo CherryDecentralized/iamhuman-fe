@@ -29,12 +29,18 @@ const fadeInOut = keyframes`
 `;
 const Sentence = styled.div`
   @media (min-width: 768px) {
+    display:block;
+    z-index: 12;
+    color: rgba(255, 255, 255, 0.80);
     align-items: center;
     text-align: center;
+    font-size: 2.89188rem;
     width: 84.8rem;
     animation: ${fadeInOut} 12s ease-in-out infinite;
   }
   @media (max-width: 768px) {
+    z-index: 12;
+    color: rgba(255, 255, 255, 0.80);
     align-items: center;
     text-align: center;
     width: 20rem;

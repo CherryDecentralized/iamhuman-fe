@@ -6,14 +6,6 @@ import GlobeRaycaster from './globe/GlobeRaycaster';
 import '../style/App.css'
 import { debounce, throttle } from 'lodash';
 import SeederComponent from './SeederComponent';
-
-import whyDidYouRender from '@welldone-software/why-did-you-render';
-    
-whyDidYouRender(React, {
-
-    trackAllPureComponents: true,
-
-});
  
 
 const CLOUDS_IMG_URL = '../assets/clouds.png';
@@ -199,13 +191,26 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
     
     const createParticleAtCoordinate = (coords: { latitude: number, longitude: number } | null, pledgeObj: { location: { countryName: string; countryCodeISO:string; }; name: any; }) => {
         if (coords) {
-            const randomOffset = () => (Math.random() - 0.5) * 20; // Adjust the multiplier for larger or smaller offset
-            // Adjusted position with some randomness
-            const position = globeEl.current.getCoords(
-                coords.latitude + randomOffset(),
-                coords.longitude + randomOffset(),
-                (getGlobeRadius() * 0.01) + (Math.random() * 0.001) // Adding randomness to altitude
-            );
+            let position;
+    
+            // Find the triangle below the given coordinates
+            const globeRaycaster = new GlobeRaycaster(getGlobeRadius(), shapes.current);
+            const targetPosition = globeEl.current.getCoords(coords.latitude, coords.longitude, getGlobeRadius());
+            const intersectedTriangle = globeRaycaster.findTriangleByVector(targetPosition);
+    
+            if (intersectedTriangle && !intersectedTriangle.userData.firstPledgeCreated) {
+                // No offset for the first pledge
+                position = targetPosition;
+            } else {
+                // Apply random offset for subsequent pledges
+                const randomOffset = () => (Math.random() - 0.5) * 20;
+                position = globeEl.current.getCoords(
+                    coords.latitude + randomOffset(),
+                    coords.longitude + randomOffset(),
+                    (getGlobeRadius() * 0.01) + (Math.random() * 0.001)
+                );
+            }
+    
             const randomColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
             const sphereGeometry = new t.SphereGeometry(SAT_SIZE * getGlobeRadius() / EARTH_RADIUS_KM, 32, 32);
             const sphereMaterial = new t.MeshStandardMaterial({ color: randomColor, transparent: true, opacity: 0.7 });
@@ -275,14 +280,16 @@ const GlobeComponent: React.FC<GlobeComponentProps> = ({ sseData }) => {
         const activateTriangle = (triangle: { userData: { activated: boolean; originalOpacity: any; }; material: { opacity: number; }; }) => {
             // Increase opacity based on whether it's the first activation
             if (isFirstPledgeActivation && !triangle.userData.activated) {
+                if(!triangle.userData.activated){
+                triangle.userData.firstPledgeCreated = true;
                 triangle.material.opacity = 0.3; // Initial opacity for first pledge
                 isFirstPledgeActivation = false; // Reset the flag after first activation
                 triangle.userData.originalOpacity = triangle.material.opacity; // Save original opacity
+                }
             } else {
                 // Gradually increase opacity for subsequent activations
                 triangle.material.opacity = Math.min(triangle.material.opacity + 0.0085, 0.1);
                 triangle.userData.originalOpacity = triangle.material.opacity; // Save original opacity
-
             }
     
             // Check if triangle is fully opaque (for subsequent activations)
