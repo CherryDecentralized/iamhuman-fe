@@ -59,7 +59,7 @@ const App: React.FC = () => {
   
   const headerContainerClassMap = {
     home: '',
-    ecosystem: '',//-ecosystem
+    ecosystem: '-ecosystem',
     'our-mission': '',
     statistics: ''
   };

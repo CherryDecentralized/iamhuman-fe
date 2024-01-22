@@ -34,6 +34,16 @@
     z-index: 2;
     pointer-events: auto; /* Re-enable for interactive elements inside header */
   }
+  .header-container-ecosystem {
+    order:0;
+    top:0;
+    margin-top: 1.72rem;
+    position:relative;
+    flex-direction: row;
+    align-items: stretch;
+    z-index: 2;
+    pointer-events: auto; /* Re-enable for interactive elements inside header */
+  }
   .globe-position-home {
     position: relative;
     z-index: -2;
@@ -108,7 +118,16 @@
     z-index: 2;
     pointer-events: auto;
   }
-
+  .header-container-ecosystem{
+    order:1;
+    margin-top: 1.72rem;
+    margin-left: 1.72rem;
+    position:relative;
+    flex-direction: row;
+    align-items: stretch;
+    z-index: 2;
+    pointer-events: auto;
+  }
   .globe-position-home {
     position: absolute;
     z-index: -2;
