@@ -6,28 +6,28 @@
     skip_processing = true
 
 [[headers]]
-  for = "/static/media/*.woff"
+  for = "/assets/fonts/*.woff"
   [headers.values]
     Cache-Control = "public, max-age=31536000"
     Access-Control-Allow-Origin = "*"
     Content-Type = "application/font-woff"
 
 [[headers]]
-  for = "/static/media/*.woff2"
+  for = "/assets/fonts/*.woff2"
   [headers.values]
   Cache-Control = "public, max-age=31536000"
     Access-Control-Allow-Origin = "*"
     Content-Type = "application/font-woff2"
 
 [[headers]]
-  for = "/static/media/*.ttf"
+  for = "/assets/fonts/*.ttf"
   [headers.values]
     Cache-Control = "public, max-age=31536000"
     Access-Control-Allow-Origin = "*"
     Content-Type = "application/font-ttf"
 
 [[headers]]
-  for = "/static/media/*.eot"
+  for = "/assets/fonts/*.eot"
   [headers.values]
     Cache-Control = "public, max-age=31536000"
     Access-Control-Allow-Origin = "*"
