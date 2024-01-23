@@ -36,7 +36,7 @@
         font-weight: 400;
         line-height: normal;
         letter-spacing: 0.2rem;
-        margin-top:125vh;
+        margin-top:135vh;
         pointer-events: auto;
     }
 
@@ -95,7 +95,7 @@
         letter-spacing: 0.105rem;
     }
     p{
-        height:2%;
+        height:1%;
     }
 }
 
