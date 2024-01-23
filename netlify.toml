@@ -6,28 +6,28 @@
     skip_processing = true
 
 [[headers]]
-  for = "/assets/fonts/*.woff"
+  for = "/src/fonts/Mazzard/*.woff"
   [headers.values]
     Cache-Control = "public, max-age=31536000"
     Access-Control-Allow-Origin = "*"
     Content-Type = "application/font-woff"
 
 [[headers]]
-  for = "/assets/fonts/*.woff2"
+  for = "/src/fonts/Mazzard/*.woff2"
   [headers.values]
   Cache-Control = "public, max-age=31536000"
     Access-Control-Allow-Origin = "*"
     Content-Type = "application/font-woff2"
 
 [[headers]]
-  for = "/assets/fonts/*.ttf"
+  for = "/src/fonts/Mazzard/*.ttf"
   [headers.values]
     Cache-Control = "public, max-age=31536000"
     Access-Control-Allow-Origin = "*"
     Content-Type = "application/font-ttf"
 
 [[headers]]
-  for = "/assets/fonts/*.eot"
+  for = "/src/fonts/Mazzard/*.eot"
   [headers.values]
     Cache-Control = "public, max-age=31536000"
     Access-Control-Allow-Origin = "*"
