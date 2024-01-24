@@ -5,7 +5,8 @@
         url('../fonts/Mazzard/MazzardM-Medium.eot?#iefix') format('embedded-opentype'),
         url('../fonts/Mazzard/MazzardM-Medium.woff2') format('woff2'),
         url('../fonts/Mazzard/MazzardM-Medium.woff') format('woff'),
-        url('../fonts/Mazzard/MazzardM-Medium.ttf') format('truetype');
+        url('../fonts/Mazzard/MazzardM-Medium.ttf') format('truetype'),
+        url('https://iamhuman.network/static/media/MazzardM-Medium.woff2') format('woff2');
     font-weight: 500;
     font-style: normal;
 }
