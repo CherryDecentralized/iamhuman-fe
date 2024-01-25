@@ -47,7 +47,7 @@ input::placeholder {
         height: 6.6rem;
         background-color: transparent;
         color: #FFF;
-        font-family: Mazzard;
+        font-family: 'Mazzard H';
         font-size: 1.25rem;
         font-style: normal;
         font-weight: 400;
@@ -90,7 +90,7 @@ input::placeholder {
         border-radius: 5rem;
         background: #FFF;
         color: #000;
-        font-family: Mazzard;
+        font-family: 'Mazzard H';
         font-size: 1.25rem;
         font-style: normal;
         font-weight: 700;
@@ -176,7 +176,7 @@ input::placeholder {
     .fullName-input-mobile {
         background-color: transparent;
         color: #FFF;
-        font-family: Mazzard;
+        font-family: 'Mazzard H';
         font-size: 0.8rem;
         font-style: normal;
         font-weight: 400;
@@ -194,7 +194,7 @@ input::placeholder {
         border-radius: 0rem 0rem 5rem 5rem;
         background: #FFF;
         color: #000;
-        font-family: Mazzard;
+        font-family: 'Mazzard H';
         font-size: 0.8rem;
         font-style: normal;
         font-weight: 400;

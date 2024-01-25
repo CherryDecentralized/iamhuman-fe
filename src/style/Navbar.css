@@ -6,7 +6,7 @@
 .navbar-item {
   cursor: pointer;
   padding-right: 1.36rem;
-  font-family: 'Mazzard', sans-serif;
+  font-family: 'Mazzard H', sans-serif;
   font-size: 1rem;
   font-weight: 400;
   transition: font-size 0.3s ease, font-weight 0.3s ease;
@@ -65,7 +65,7 @@
     cursor: pointer;
     position: relative;
     color: white;
-    font-family: Mazzard;
+    font-family: 'Mazzard H';
     font-size: 2rem;
     letter-spacing: 0.1rem;
     line-height: 4rem;
